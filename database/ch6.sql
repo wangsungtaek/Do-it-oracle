@@ -52,4 +52,14 @@ SELECT '010-1234-5678' AS REPLACE_BEFORE,
 	   REPLACE('010-1234-5678', '-') AS REPLACE_2
   FROM DUAL;	   
 
- 
+SELECT 'Oracle',
+	   LPAD('Oracle', 10, '#') AS LPAD_1,
+	   RPAD('Oracle', 10, '*') AS RPAD_1,
+	   LPAD('Oracle', 10) AS LPAD_2,
+	   RPAD('Oracle', 10) AS RPAD_2
+  FROM DUAL;
+  
+SELECT RPAD('971225-', 14, '*') AS RPAD_JMNO,
+	   RPAD('010-1234-', 13, '*') AS RPAD_ PHONE
+  FROM DUAL;
+  
