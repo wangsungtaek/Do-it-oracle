@@ -1,6 +1,6 @@
 -- 실습 12-1
 CREATE TABLE EMP_DDL(
-   EMPNO      NUMBER(4),
+   EMPNO	  NUMBER(4),
    ENAME      VARCHAR2(10),
    JOB        VARCHAR2(9),
    MGR        NUMBER(4),
