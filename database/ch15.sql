@@ -1,0 +1,99 @@
+
+/*
+# 15-1 사용자 관리
+
+데이터베이스 스키마란?
+	데이터베이스에서 데이터 간 관계, 데이터 구조, 제약 조건 등 데이터를 저장 및 관리하기 위해
+	정의한 데이터베이스의 구조의 범위를 스키마(schema)를 통해 그룹 단위로 분류합니다.
+*/
+/*
+# 15-2 권한 관리
+
+시스템 권한이란?
+	오라클 데이터베이스의 시스템 권한(system privilege)은 사용자 생성과 정보 수정 및 삭제,
+	데이터베이스 접근, 오라클 데이터베이스의 여러 자원과 객체 생성 및 관리 등의 권한을 포함합니다.
+*/
+-- SYSTEM 계정으로 접속하여 사용자(ORCLSTUDY) 생성하기
+CREATE USER ORCLSTUDY
+IDENTIFIED BY ORACLE;
+
+-- 사용자 권한 부여하기
+GRANT RESOURCE, CREATE SESSION, CREATE TABLE TO ORCLSTUDY;
+
+CREATE TABLE TEMP1 (
+	COL1 VARCHAR2(20),
+	COL2 VARCHAR2(20)
+);
+INSERT INTO TEMP1 VALUES('USER', 'GRANT_TEST');
+SELECT * FROM TEMP1;
+
+/*
+RESOURCE는 오라클 데이터베이스에서 제공하는 롤(role)중 하나입니다.
+롤은 여러 권한을 하나의 이름으로 묶어 권한 부여 관련 작업을 간편하게 하려고 사용합니다.
+*/
+
+REVOKE RESOURCE, CREATE TABLE FROM ORCLSTUDY;
+
+-- ORCLSTUDY 사용자에게 TEMP 테이블 권한 부여하기
+CREATE TABLE TEMP (
+	COL1 VARCHAR2(20),
+	COL2 VARCHAR2(20)
+);
+
+GRANT SELECT ON TEMP TO ORCLSTUDY;
+GRANT INSERT ON TEMP TO ORCLSTUDY;
+
+-- 여러권한 한 번에 부여하기
+GRANT SELECT, INSERT ON TEMP
+   TO ORCLSTUDY;
+   
+-- ORCLSTUDY로 사용 권한을 부여받은 TEMP 테이블 사용하기
+SELECT * FROM SCOTT.TEMP;
+INSERT INTO SCOTT.TEMP VALUES('TEXT', 'FROM ORCLSTUDY');
+
+SELECT * FROM SCOTT.TEMP;
+
+-- ORCLSTUDY에 부여된 TEMP 테이블 사용 권한 취소하기
+REVOKE SELECT, INSERT ON TEMP FROM ORCLSTUDY;
+
+/*
+# 롤 관리
+롤이란?
+	여러 종류의 권한을 묶어 놓은 그룹을 뜻한다.
+  */
+
+-- SYSTEM 계정으로 ROLESTUDY 롤 생성 및 권한 부여하기
+CREATE ROLE ROLESTUDY;
+
+GRANT CONNECT, RESOURCE, CREATE VIEW, CREATE SYNONYM
+   TO ROLESTUDY;
+   
+-- ORCLSTUDY 사용자에세 롤(ROLE)부여하기
+GRANT ROLESTUDY TO ORCLSTUDY;
+
+-- ORCLSTUDY에 부여된 롤과 권한 확인하기
+SELECT * FROM USER_SYS_PRIVS;
+SELECT * FROM USER_ROLE_PRIVS;
+
+-- Q1
+CREATE USER PREV_HW
+IDENTIFIED BY ORCL;
+
+GRANT CREATE SESSION TO PREV_HW;
+
+-- Q2
+GRANT SELECT ON EMP TO PREV_HW;
+GRANT SELECT ON DEPT TO PREV_HW;
+GRANT SELECT ON SALGRADE TO PREV_HW;
+
+SELECT * FROM SCOTT.EMP;
+SELECT * FROM SCOTT.DEPT;
+SELECT * FROM SCOTT.SALGRADE;
+
+REVOKE SELECT ON EMP FROM PREV_HW;
+REVOKE SELECT ON DEPT FROM PREV_HW;
+REVOKE SELECT ON SALGRADE FROM PREV_HW;
+
+-- 15-3
+DROP USER PREV_HW;
+SELECT * FROM ALL_USERS;
